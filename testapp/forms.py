@@ -44,10 +44,84 @@
 # from django.core import validators
 #     validators=[validators.MaxLengthValidator(40),validators.MinLengthValidator(10)]
 
+# from django.core import validators
+# from django import forms
+# class FeedBackForm(forms.Form):
+#     name = forms.CharField()
+#     rollno = forms.IntegerField()
+#     email = forms.EmailField()
+#     feedback = forms.CharField(widget=forms.Textarea, validators=[validators.MaxLengthValidator(40), validators.MinLengthValidator(10)]) #--> Case - 3: Validating by inbuilt Validator(from django.core import Validator)
+#
+#=======================================================================================================================
+# #Case - 4:
+# #How to implement custom validators by using validators parameter?
+# #The name should be starts with 's' or 'S'
+#
+# from django.core import validators
+# from django import forms
+#
+# def starts_with_s(value):
+#     print('starts_with_s function execution')
+#     if value[0].lower() != 's':
+#         raise forms.ValidationError('Name should be starts with s or S')
+#
+# class FeedBackForm(forms.Form):
+#     name = forms.CharField(validators=[starts_with_s])
+#     rollno = forms.IntegerField()
+#     email = forms.EmailField()
+#     feedback = forms.CharField(widget=forms.Textarea)
+
+#----------------------------------------------------------------------------
+
+# #The name should be starts with 's' or 'S'
+# # mail should contain @gmail.com
+#
+# from django.core import validators
+# from django import forms
+#
+# def starts_with_s(value):
+#     print('starts_with_s function execution')
+#     if value[0].lower() != 's':
+#         raise forms.ValidationError('Name should be starts with s or S')
+#
+# def gmail_validator(value):
+#     print('Checking for gmail validation')
+#     if value[-10:] != '@gmail.com':
+#         raise forms.ValidationError('Mail extension should be gmail')
+#
+# class FeedBackForm(forms.Form):
+#     name = forms.CharField(validators=[starts_with_s])
+#     rollno = forms.IntegerField()
+#     email = forms.EmailField(validators=[gmail_validator])
+#     feedback = forms.CharField(widget=forms.Textarea)
+
+
+#=======================================================================================================================
+
+#Case - 5:
+# Validation of total form directly by using single clean() method
+
 from django.core import validators
 from django import forms
+
 class FeedBackForm(forms.Form):
     name = forms.CharField()
     rollno = forms.IntegerField()
     email = forms.EmailField()
-    feedback = forms.CharField(widget=forms.Textarea, validators=[validators.MaxLengthValidator(40), validators.MinLengthValidator(10)]) #--> Case - 3: Validating by inbuilt Validator(from django.core import Validator)
+    feedback = forms.CharField(widget=forms.Textarea)
+
+    def clean(self):
+        print('Total form validation.....')
+        total_cleaned_data = super().clean()
+        print('Validating Name')
+        inputname = total_cleaned_data['name']
+        if inputname[0].lower() != 's':
+            raise forms.ValidationError('Name should starts with s')
+        print('Validating Rollno')
+        inputrollno = total_cleaned_data['rollno']
+        if inputrollno <= 0:
+            raise forms.ValidationError('Rollno should be > 0')
+        print('Validating Email')
+        inputemail = total_cleaned_data['email']
+        if inputemail[-10:] != '@gmail.com':
+            raise forms.ValidationError('Email extension should be gmail')
