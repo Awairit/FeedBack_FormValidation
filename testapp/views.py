@@ -1,5 +1,5 @@
-#Case - 1: Simple FeedBack Form
-
+# # Case - 1: Simple FeedBack Form
+#
 # from django.shortcuts import render
 # from testapp.forms import *
 #
@@ -21,12 +21,12 @@
 #     form = FeedBackForm()
 #     return render(request,'testapp/feedback.html',
 # 	{'form':form,'submitted':submitted,'name':name})
-
-#=======================================================================================================================
-
-#Case - 2:
-##1) Form Validation :--> Explicitly by the programmer by using 'clean methods'
-
+#
+# # =======================================================================================================================
+#
+# # Case - 2:
+# # 1) Form Validation :--> Explicitly by the programmer by using 'clean methods'
+#
 # from django.shortcuts import render
 # from testapp.forms import *
 #
@@ -52,9 +52,9 @@
 #                                                                     # Case - 2:empty form should be first
 #     return render(request,'testapp/feedback.html',
 # 	{'form':form,'submitted':submitted,'name':name})
-
-#=======================================================================================================================
-
+#
+# # =======================================================================================================================
+#
 # # Case - 3, 4, 5:
 # # 2). Form Validation :--> By using in-built validators:
 #
@@ -78,11 +78,38 @@
 #             name = form.cleaned_data['name']
 #     return render(request,'testapp/feedback.html',
 # 	{'form':form,'submitted':submitted,'name':name})
+#
+# =======================================================================================================================
+#
+# # Case - 6:
+# # How to check original pwd and re-entered pwd are same or not?
+#
+# from django.shortcuts import render
+# from testapp.forms import *
+#
+# def feedback_view(request):
+#     form = FeedBackForm()
+#     submitted = False
+#     name = ''
+#     if request.method == 'POST':
+#         form = FeedBackForm(request.POST)
+#         if form.is_valid():
+#             print('Form validation success and printing feedback information')
+#             print('*'*50)
+#             print('Name:',form.cleaned_data['name'])
+#             print('Password:',form.cleaned_data['password'])
+#             print('Re-Entered Password:', form.cleaned_data['rpassword'])
+#             print('Email ID:',form.cleaned_data['email'])
+#
+#             submitted = True
+#             name = form.cleaned_data['name']
+#     return render(request,'testapp/feedback.html',
+# 	{'form':form,'submitted':submitted,'name':name})
+#
+# # =======================================================================================================================
 
-#=======================================================================================================================
-
-# Case - 6:
-# 3) How to check original pwd and re-entered pwd are same or not?
+# Case - 3, 4, 5, 7:
+# Bot Handling
 
 from django.shortcuts import render
 from testapp.forms import *
@@ -97,10 +124,9 @@ def feedback_view(request):
             print('Form validation success and printing feedback information')
             print('*'*50)
             print('Name:',form.cleaned_data['name'])
-            print('Password:',form.cleaned_data['password'])
-            print('Re-Entered Password:', form.cleaned_data['rpassword'])
+            print('RollNo:',form.cleaned_data['rollno'])
             print('Email ID:',form.cleaned_data['email'])
-
+            print('Feedback:',form.cleaned_data['feedback'])
             submitted = True
             name = form.cleaned_data['name']
     return render(request,'testapp/feedback.html',
